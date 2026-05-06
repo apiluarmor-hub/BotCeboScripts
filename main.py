@@ -9,33 +9,26 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-GUILD_ID = 1480009880105517069 # ← tu servidor
+GUILD_ID = 1480009880105517069
 
 @client.event
 async def on_ready():
     print(f'✅ Bot conectado como {client.user}')
     
-    guild = discord.Object(id=GUILD_ID)
-    
     try:
-        await tree.copy_global_to(guild=guild)
-        synced = await tree.sync(guild=guild)
+        synced = await tree.sync(guild=discord.Object(id=GUILD_ID))
         print(f'✅ Comandos sincronizados: {len(synced)}')
     except Exception as e:
-        print(e)
+        print(f'❌ Error sync: {e}')
 
 @tree.command(
-    name="hablar", 
-    description="El bot envía tu mensaje en público",
-    guild=discord.Object(id=GUILD_ID)  # 👈 importante
+    name="hablar",
+    description="El bot envía tu mensaje",
+    guild=discord.Object(id=GUILD_ID)
 )
-@app_commands.describe(texto="Mensaje que quieres que el bot envíe")
+@app_commands.describe(texto="Mensaje")
 async def hablar(interaction: discord.Interaction, texto: str):
-    
-    # 👁️ Confirmación privada
-    await interaction.response.send_message("✅ Mensaje enviado", ephemeral=True)
-    
-    # 🌍 Mensaje público
+    await interaction.response.send_message("✅ enviado", ephemeral=True)
     await interaction.channel.send(texto)
 
 client.run(os.getenv("DISCORD_TOKEN"))
