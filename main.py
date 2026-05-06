@@ -9,7 +9,7 @@ intents = discord.Intents.default()
 client = discord.Client(intents=intents)
 tree = app_commands.CommandTree(client)
 
-GUILD_ID = 1480009881758077066  # ← tu servidor
+GUILD_ID = 1480009880105517069 # ← tu servidor
 
 @client.event
 async def on_ready():
